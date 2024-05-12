@@ -33,6 +33,8 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         })
+
+        //update status when booking
         app.put('/rooms/:id', async (req, res) => {
             const { id } = req.params;
             const updatedEstate = req.body;
