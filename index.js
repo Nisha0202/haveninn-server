@@ -24,111 +24,115 @@ const client = new MongoClient(uri, {
 //form things- 
 async function run() {
 
-    try {
-        
-        const databaseCollection = client.db('hotel').collection('rooms');
+  try {
 
-        app.get('/rooms', async (req, res) => {
-            const cursor = databaseCollection.find();
-            const result = await cursor.toArray();
-            res.send(result);
-        })
+    const databaseCollection = client.db('hotel').collection('rooms');
 
-        //update status when booking
-        app.put('/rooms/:id', async (req, res) => {
-            const { id } = req.params;
-            const updatedEstate = req.body;
-            try {
-              await databaseCollection.updateOne({ id }, { $set: updatedEstate });
-              res.sendStatus(200);
-            } catch (error) {
-              console.error('Failed to update room:', error);
-              res.sendStatus(500);
-            }
-          });
-          
+    // //showing
+    // app.get('/rooms', async (req, res) => {
+    //     const cursor = databaseCollection.find();
+    //     const result = await cursor.toArray();
+    //     res.send(result);
+    // })
 
- 
+    //update status when booking
+    app.put('/rooms/:id', async (req, res) => {
+      const { id } = req.params;
+      const updatedEstate = req.body;
+      try {
+        await databaseCollection.updateOne({ id }, { $set: updatedEstate });
+        res.sendStatus(200);
+      } catch (error) {
+        console.error('Failed to update room:', error);
+        res.sendStatus(500);
+      }
+    });
 
-//         //add list
-//         app.post('/touristspots', async (req, res) => {
-//             const formData= req.body;
-//             console.log(formData);
-//             const result = await touristSpotsCollection.insertOne(formData);
-//             res.send(result);
-//         })
-
-//         // delete
-//            app.delete('/touristspots/:id', async (req, res) => {
-//             const id = req.params.id;
-//             const query = { _id: new ObjectId(id)}
-//             const result = await touristSpotsCollection.deleteOne(query);
-//             res.send(result);
-//         })
-
-
-//         // update
-//         app.get('/touristspots/:id', async (req, res) => {
-//             const id = req.params.id;
-//             console.log(id);
-//             const query = { _id: new ObjectId(id)  }
-//             const result = await touristSpotsCollection.findOne(query);
-//             res.send(result);
-//         })
+    // Showing or sorting
+    app.get('/rooms', async (req, res) => {
+      const { sort } = req.query;
+      let cursor;
+      if (sort === 'price') {
+        cursor = databaseCollection.find().sort({ price: 1 });
+      } else {
+        cursor = databaseCollection.find();
+      }
+      const result = await cursor.toArray();
+      res.send(result);
+    });
 
 
 
-// app.put('/touristspots/:id', async (req, res) => {
-//     const id = req.params.id;
-//     const filter = { _id: new ObjectId(id) }
-//     const options = { upsert: true };
-//     const spots = req.body;
-//     const data = {
-//       $set: {
-//         image_url: spots.image_url,
-//         tourists_spot_name: spots.tourists_spot_name,
-//         country_name: spots.country_name,
-//         location: spots.location,
-//         short_description: spots.short_description,
-//         average_cost: spots.average_cost,
-//         seasonality: spots.seasonality,
-//         travel_time: spots.travel_time,
-//         total_visitors_per_year: spots.total_visitors_per_year,
-//         user_name: spots.user_name, 
-//         user_email: spots.user_email,
-//       }
-//     }
-//     const result = await touristSpotsCollection.updateOne(filter, data, options);
-//     res.send({ matchedCount: result.matchedCount, modifiedCount: result.modifiedCount });
-//   })
+    //         //add list
+    //         app.post('/touristspots', async (req, res) => {
+    //             const formData= req.body;
+    //             console.log(formData);
+    //             const result = await touristSpotsCollection.insertOne(formData);
+    //             res.send(result);
+    //         })
+
+    //         // delete
+    //            app.delete('/touristspots/:id', async (req, res) => {
+    //             const id = req.params.id;
+    //             const query = { _id: new ObjectId(id)}
+    //             const result = await touristSpotsCollection.deleteOne(query);
+    //             res.send(result);
+    //         })
 
 
-    
-        // Send a ping to confirm a successful connection
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
-    } finally {
-        // Ensures that the client will close when you finish/error
-        // await client.close();
-    }
+    //         // update
+    //         app.get('/touristspots/:id', async (req, res) => {
+    //             const id = req.params.id;
+    //             console.log(id);
+    //             const query = { _id: new ObjectId(id)  }
+    //             const result = await touristSpotsCollection.findOne(query);
+    //             res.send(result);
+    //         })
+
+
+
+    // app.put('/touristspots/:id', async (req, res) => {
+    //     const id = req.params.id;
+    //     const filter = { _id: new ObjectId(id) }
+    //     const options = { upsert: true };
+    //     const spots = req.body;
+    //     const data = {
+    //       $set: {
+    //         image_url: spots.image_url,
+    //         tourists_spot_name: spots.tourists_spot_name,
+    //         country_name: spots.country_name,
+    //         location: spots.location,
+    //         short_description: spots.short_description,
+    //         average_cost: spots.average_cost,
+    //         seasonality: spots.seasonality,
+    //         travel_time: spots.travel_time,
+    //         total_visitors_per_year: spots.total_visitors_per_year,
+    //         user_name: spots.user_name, 
+    //         user_email: spots.user_email,
+    //       }
+    //     }
+    //     const result = await touristSpotsCollection.updateOne(filter, data, options);
+    //     res.send({ matchedCount: result.matchedCount, modifiedCount: result.modifiedCount });
+    //   })
+
+
+
+    // Send a ping to confirm a successful connection
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    // Ensures that the client will close when you finish/error
+    // await client.close();
+  }
 
 }
 
 run().catch(console.dir);
 
-app.get('/', (req, res) =>{
-    res.send('server running')
+app.get('/', (req, res) => {
+  res.send('server running')
 })
 
-app.listen(port, ()=>{
-    console.log(`Port:${port}`)
+app.listen(port, () => {
+  console.log(`Port:${port}`)
 })
 
-
-       //mylist
-//         app.get("/touristspots/:email", async (req, res) => {
-//           const email = req.params.email;
-//            const query = { user_email: email };
-//   const result = await touristSpotsCollection.find(query)
-//   res.send(result);
-//       });
-      
