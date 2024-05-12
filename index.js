@@ -61,60 +61,17 @@ async function run() {
       res.send(result);
     });
 
+    //user booked data
+    app.get('/rooms/user', async (req, res) => {
+      const { email } = req.query;
+      let cursor = databaseCollection.find({ bookedEmail: email });
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    
 
 
-    //         //add list
-    //         app.post('/touristspots', async (req, res) => {
-    //             const formData= req.body;
-    //             console.log(formData);
-    //             const result = await touristSpotsCollection.insertOne(formData);
-    //             res.send(result);
-    //         })
-
-    //         // delete
-    //            app.delete('/touristspots/:id', async (req, res) => {
-    //             const id = req.params.id;
-    //             const query = { _id: new ObjectId(id)}
-    //             const result = await touristSpotsCollection.deleteOne(query);
-    //             res.send(result);
-    //         })
-
-
-    //         // update
-    //         app.get('/touristspots/:id', async (req, res) => {
-    //             const id = req.params.id;
-    //             console.log(id);
-    //             const query = { _id: new ObjectId(id)  }
-    //             const result = await touristSpotsCollection.findOne(query);
-    //             res.send(result);
-    //         })
-
-
-
-    // app.put('/touristspots/:id', async (req, res) => {
-    //     const id = req.params.id;
-    //     const filter = { _id: new ObjectId(id) }
-    //     const options = { upsert: true };
-    //     const spots = req.body;
-    //     const data = {
-    //       $set: {
-    //         image_url: spots.image_url,
-    //         tourists_spot_name: spots.tourists_spot_name,
-    //         country_name: spots.country_name,
-    //         location: spots.location,
-    //         short_description: spots.short_description,
-    //         average_cost: spots.average_cost,
-    //         seasonality: spots.seasonality,
-    //         travel_time: spots.travel_time,
-    //         total_visitors_per_year: spots.total_visitors_per_year,
-    //         user_name: spots.user_name, 
-    //         user_email: spots.user_email,
-    //       }
-    //     }
-    //     const result = await touristSpotsCollection.updateOne(filter, data, options);
-    //     res.send({ matchedCount: result.matchedCount, modifiedCount: result.modifiedCount });
-    //   })
-
+  
 
 
     // Send a ping to confirm a successful connection
