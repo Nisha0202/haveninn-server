@@ -33,6 +33,18 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         })
+        app.put('/rooms/:id', async (req, res) => {
+            const { id } = req.params;
+            const updatedEstate = req.body;
+            try {
+              await databaseCollection.updateOne({ id }, { $set: updatedEstate });
+              res.sendStatus(200);
+            } catch (error) {
+              console.error('Failed to update room:', error);
+              res.sendStatus(500);
+            }
+          });
+          
 
  
 
