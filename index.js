@@ -26,10 +26,10 @@ async function run() {
 
     try {
         
-        const touristSpotsCollection = client.db('hotel').collection('rooms');
+        const databaseCollection = client.db('hotel').collection('rooms');
 
         app.get('/rooms', async (req, res) => {
-            const cursor = touristSpotsCollection.find();
+            const cursor = databaseCollection.find();
             const result = await cursor.toArray();
             res.send(result);
         })
@@ -89,23 +89,6 @@ async function run() {
 //   })
 
 
-
-
-//         //show countries
-//         const countryCollection = client.db('test').collection('countries');
-
-//         app.get('/countries', async (req, res) => {
-//             const cursor = countryCollection.find();
-//             const result = await cursor.toArray();
-//             res.send(result);
-//         })
-
-//         app.post('/countries', async (req, res) => {
-//           const formData= req.body;
-//           console.log(formData);
-//           const result = await countryCollection.insertOne(formData);
-//           res.send(result);
-//       })
     
         // Send a ping to confirm a successful connection
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
