@@ -69,7 +69,23 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+
+
+    //reviews
+
+    const reviewCollection = client.db('hotel').collection('reviews');
     
+    app.post('/reviews', async (req, res) => {
+      const review = req.body;
+    
+      try {
+        await reviewCollection.insertOne(review);
+        res.status(201).send('Review posted');
+      } catch (error) {
+        console.error('Failed to post review:', error);
+        res.status(500).send('Failed to post review');
+      }
+    });
 
 
   
