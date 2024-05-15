@@ -75,6 +75,7 @@ async function run() {
 
     const reviewCollection = client.db('hotel').collection('reviews');
     
+    // add
     app.post('/reviews', async (req, res) => {
       const review = req.body;
     
@@ -87,6 +88,29 @@ async function run() {
       }
     });
 
+    // see
+    app.get('/reviews', async (req, res) => {
+      try {
+        const reviews = await reviewCollection.find().toArray();
+        res.status(200).json(reviews);
+      } catch (error) {
+        console.error('Failed to get reviews:', error);
+        res.status(500).send('Failed to get reviews');
+      }
+    })
+
+    //review on rooms
+    app.get('/reviews/:id', async (req, res) => {
+      const estateId = req.params.id;
+  
+      try {
+        const reviews = await reviewCollection.find({ roomId: estateId }).toArray();
+        res.status(200).json(reviews);
+      } catch (error) {
+        console.error('Failed to fetch reviews:', error);
+        res.status(500).send('Failed to fetch reviews');
+      }
+    });
 
   
 
