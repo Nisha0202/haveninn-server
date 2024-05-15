@@ -8,6 +8,12 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 // middleware
 app.use(cors());
 app.use(express.json());
+// app.use(cookieParser());
+
+// const jwt = require('jsonwebtoken');
+// const { parse } = require('dotenv');
+// const cookieParser = require('cookie-parser');
+
 
 const uri = `mongodb+srv://${process.env.S3_BUCKET}:${process.env.SECRET_KEY}@cluster0.5cua0xk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 const ObjectId = require('mongodb').ObjectId;
@@ -25,15 +31,35 @@ const client = new MongoClient(uri, {
 async function run() {
 
   try {
+//    const cookieOptions = {
+//       httpOnly: true,
+//       secure: process.env.NODE_ENV === "production",
+//       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+//     };
+
+
+// //creating Token
+// app.post("/jwt", async (req, res) => {
+//   const user = req.body;
+//   console.log("user for token", user);
+//   jwt.sign(user, process.env.SECRET_TOKEN,{
+//         expiresIn:'7d'
+//       })
+
+//   res.cookie("token", token, cookieOptions).send({ success: true });
+// });
+
+// //clearing Token
+// app.post("/logout", async (req, res) => {
+//   const user = req.body;
+//   console.log("logging out", user);
+//   res
+//     .clearCookie("token", { ...cookieOptions, maxAge: 0 })
+//     .send({ success: true });
+// });
+
 
     const databaseCollection = client.db('hotel').collection('rooms');
-
-    // //showing
-    // app.get('/rooms', async (req, res) => {
-    //     const cursor = databaseCollection.find();
-    //     const result = await cursor.toArray();
-    //     res.send(result);
-    // })
 
     //update status when booking
     app.put('/rooms/:id', async (req, res) => {
@@ -63,12 +89,50 @@ async function run() {
     });
 
     //user booked data
-    app.get('/rooms/user', async (req, res) => {
-      const { email } = req.query;
-      let cursor = databaseCollection.find({ bookedEmail: email });
-      const result = await cursor.toArray();
-      res.send(result);
-    });
+      
+        app.get('/rooms/user', async (req, res) => {
+          const { email } = req.query;
+          let cursor = databaseCollection.find({ bookedEmail: email });
+          const result = await cursor.toArray();
+          res.send(result);
+        });
+
+    // app.get('/rooms/user', async (req, res) => {
+    //   const token = req.cookies?.token;
+    //   console.log(token);
+    //   if(token){
+    //     jwt.verify(token, process.env.SECRET_TOKEN, (err, decoded) => {
+    //       if(err){
+    //         return console.log(err)
+    //       }
+    //       console.log(decoded);
+    
+    //       // Get the email from the decoded token
+    //       const decodedEmail = decoded.email;
+    
+    //       // Get the email from the query parameters
+    //       const { email } = req.query;
+    
+    //       // Match the emails
+    //       if(decodedEmail === email) {
+    //         let cursor = databaseCollection.find({ bookedEmail: email });
+    //         cursor.toArray().then(result => {
+    //           res.send(result);
+    //         }).catch(error => {
+    //           console.error('Error:', error);
+    //           res.sendStatus(500);
+    //         });
+    //       } else {
+    //         console.log('Emails do not match');
+    //         res.sendStatus(403); // Forbidden
+    //       }
+    //     })
+    //   } else {
+    //     res.sendStatus(401); // Unauthorized
+    //   }
+    // });
+    
+    
 
 
     //reviews
@@ -112,14 +176,12 @@ async function run() {
       }
     });
 
-  
 
 
     // Send a ping to confirm a successful connection
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
-    // Ensures that the client will close when you finish/error
-    // await client.close();
+   
   }
 
 }
