@@ -22,4 +22,4 @@ This project is a hotel booking web application designed to simplify the process
 2. Install dependencies using `npm install`
 3. Update MongoDB url to your MongoDB database url
 4. Start the Server `nodemon ./index.js`
-
+5. Clone and set up client(https://github.com/Nisha0202/haveninn-client) side to see the UI.
