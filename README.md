@@ -1,8 +1,13 @@
 # website- https://haveninn4657.netlify.app/ 
 # client side code- https://github.com/Nisha0202/haveninn-client
 
-## Haven Inn Server
-This repository contains the backend server code for Haven Inn, a hotel booking platform.
+## Project Overview
+This project is a hotel booking web application designed to simplify the process of finding and booking accommodations. It addresses the need for a user-friendly platform where guests can effortlessly browse available rooms, manage bookings, and get detailed information about each room.
+
+## Features
+- **Sign Up and Log In:** Users can create accounts and securely log into the system using their email or google.
+- **Room Booking and Booking Management :** Guests can browse available rooms and book their preferred accommodation. They can cancel or update their bookings as necessary.
+- **Protected Routes:** Ensures that only authenticated users can access booking functionalities such as detailed room information.
 
 ## Technologies Used
 1. Node.js: Server-side JavaScript runtime.
